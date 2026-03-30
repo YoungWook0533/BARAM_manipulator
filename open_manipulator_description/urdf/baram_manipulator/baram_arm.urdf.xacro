@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="baram" params="prefix">
+    <xacro:property
+      name="meshes_file_direction"
+      value="package://open_manipulator_description/meshes/baram_manipulator"/>
+
+    <link name="${prefix}link0">
+      <visual>
+        <origin xyz="0 0 0.01" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${meshes_file_direction}/base.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="gray">
+          <color rgba="0.5 0.5 0.5 1.0"/>
+        </material>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0.01" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.1" length="0.05"/>
+        </geometry>
+        <material name="gray">
+          <color rgba="0.5 0.5 0.5 1.0"/>
+        </material>
+      </collision>
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint1" type="revolute">
+      <origin xyz="0 0 0.1" rpy="0 0 0"/>
+      <parent link="${prefix}link0"/>
+      <child link="${prefix}link1"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="10.0" velocity="1.5" lower="-3.14" upper="3.14"/>
+      <dynamics damping="0.0"/>
+    </joint>
+
+    <link name="${prefix}link1">
+      <visual>
+        <origin xyz="0 0 -0.025" rpy="0 0 3.14"/>
+        <geometry>
+          <mesh filename="${meshes_file_direction}/joint1.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="gray">
+          <color rgba="1 0 0 1"/>
+        </material>
+      </visual>
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint2" type="revolute">
+      <origin xyz="0 0.065 0" rpy="0 0 0"/>
+      <parent link="${prefix}link1"/>
+      <child link="${prefix}link2"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="10.0" velocity="1.5" lower="-3.14" upper="3.14"/>
+      <dynamics damping="0.0"/>
+    </joint>
+
+    <link name="${prefix}link2">
+      <visual>
+        <origin xyz="0 0 0.168" rpy="0 0 3.14"/>
+        <geometry>
+          <mesh filename="${meshes_file_direction}/joint2.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="gray">
+          <color rgba="1 0 0 1"/>
+        </material>
+      </visual>
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint3" type="revolute">
+      <origin xyz="0 -0.065 0.343" rpy="0 0 3.14"/>
+      <parent link="${prefix}link2"/>
+      <child link="${prefix}link3"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="10.0" velocity="1.5" lower="-3.14" upper="3.14"/>
+      <dynamics damping="0.0"/>
+    </joint>
+
+    <link name="${prefix}link3">
+      <visual>
+        <origin xyz="0 0 0.165" rpy="0 0 0"/>
+        <geometry>
+          <mesh filename="${meshes_file_direction}/joint3.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="gray">
+          <color rgba="1 0 0 1"/>
+        </material>
+      </visual>
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint4" type="revolute">
+      <origin xyz="0 0 0.335" rpy="1.57 0 0"/>
+      <parent link="${prefix}link3"/>
+      <child link="${prefix}link4"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="10.0" velocity="1.5" lower="-1.57" upper="1.57"/>
+      <dynamics damping="0.0"/>
+    </joint>
+
+    <link name="${prefix}link4">
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}link4_to_link5_fixed" type="fixed">
+      <origin xyz="0 0 0.065" rpy="3.14 0 0"/>
+      <parent link="${prefix}link4"/>
+      <child link="${prefix}link5"/>
+    </joint>
+
+    <link name="${prefix}link5">
+      <visual>
+        <origin xyz="0 0 0" rpy="0 3.14 0"/>
+        <geometry>
+          <mesh filename="${meshes_file_direction}/joint5.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="gray">
+          <color rgba="0 0 1 1"/>
+        </material>
+      </visual>
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint5" type="revolute">
+      <origin xyz="0 -0.07 0" rpy="3.14 0 0"/>
+      <parent link="${prefix}link5"/>
+      <child link="${prefix}link6"/>
+      <axis xyz="0 1 0"/>
+      <limit effort="10.0" velocity="1.5" lower="-1.57" upper="1.57"/>
+      <dynamics damping="0.0"/>
+    </joint>
+
+    <link name="${prefix}link6">
+      <visual>
+        <origin xyz="0 0 0" rpy="1.57 3.14 3.14"/>
+        <geometry>
+          <mesh filename="${meshes_file_direction}/joint5.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="gray">
+          <color rgba="0 1 0 1"/>
+        </material>
+      </visual>
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+
+    <joint name="${prefix}joint6" type="revolute">
+      <origin xyz="0 0 0.055" rpy="0 0 0"/>
+      <parent link="${prefix}link6"/>
+      <child link="${prefix}hand"/>
+      <axis xyz="0 0 1"/>
+      <limit effort="10.0" velocity="1.5" lower="-1.57" upper="1.57"/>
+      <dynamics damping="0.0"/>
+    </joint>
+
+    <link name="${prefix}hand">
+      <visual>
+        <origin xyz="0 0 0.005" rpy="1.57 3.14 3.14"/>
+        <geometry>
+          <mesh filename="${meshes_file_direction}/hand.stl" scale="0.001 0.001 0.001"/>
+        </geometry>
+        <material name="gray">
+          <color rgba="0 0 0 1"/>
+        </material>
+      </visual>
+      <inertial>
+        <mass value="0.1"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <inertia ixx="0.03" iyy="0.03" izz="0.03" ixy="0.0" ixz="0.0" iyz="0.0"/>
+      </inertial>
+    </link>
+  </xacro:macro>
+</robot>

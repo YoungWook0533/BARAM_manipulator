@@ -1,20 +1,131 @@
-# ROBOTIS OpenMANIPULATOR ROS 2 Packages
+# BARAM Manipulator
 
-This repository contains the official ROS 2 packages for the ROBOTIS OpenMANIPULATOR platform. These packages provide the necessary interfaces and tools to control the robot, integrate with its sensors, and develop physical AI applications, including those utilizing frameworks like LeRobot. For detailed usage instructions, please refer to the documentation below.
-  - [Documentation for OMY](https://ai.robotis.com/omy/introduction_omy.html)
-  - [Documentation for OpenMANIPULATOR-X](https://emanual.robotis.com/docs/en/platform/openmanipulator_x/overview/)
+This repository contains ROS 2 packages for the `baram` manipulator.
 
-To learn more about the Physical AI Tools, visit:
-  - [Physical AI Tools](https://github.com/ROBOTIS-GIT/physical_ai_tools)
+The `baram` robot is a 6-DOF manipulator using:
+- `joint1` to `joint6`
+- Dynamixel IDs `0` to `5`
+- `open_manipulator_bringup` for launch
+- `open_manipulator_description` for URDF/xacro and ros2_control
 
-To explore our open-source platforms in a simulation environment, visit:
-  - [Simulation Models](https://github.com/ROBOTIS-GIT/robotis_mujoco_menagerie)
+## Build
 
-For usage instructions and demonstrations of the OpenMANIPULATOR, check out:
-  - [Tutorial Videos](https://www.youtube.com/@ROBOTISOpenSourceTeam)
+```bash
+cd ~/ros2_ws
+colcon build --packages-select dynamixel_hardware_interface open_manipulator_description open_manipulator_bringup
+source install/setup.bash
+```
 
-To access datasets and pre-trained models for our open-source platforms, see:
-  - [AI Models & Datasets](https://huggingface.co/ROBOTIS)
+## Launch
 
-To use the Docker image for running ROS packages and Physical AI tools with the OpenMANIPULATOR, visit:
-  - [Docker Images](https://hub.docker.com/r/robotis/ros/tags)
+Launch the real robot:
+
+```bash
+ros2 launch open_manipulator_bringup baram.launch.py
+```
+
+Launch with RViz:
+
+```bash
+ros2 launch open_manipulator_bringup baram.launch.py start_rviz:=true
+```
+
+Launch without the initial home motion:
+
+```bash
+ros2 launch open_manipulator_bringup baram.launch.py init_position:=false
+```
+
+Launch with mock hardware:
+
+```bash
+ros2 launch open_manipulator_bringup baram.launch.py use_mock_hardware:=true
+```
+
+Launch Gazebo:
+
+```bash
+ros2 launch open_manipulator_bringup baram_gazebo.launch.py
+```
+
+## Home Position
+
+The default home pose is loaded from `open_manipulator_bringup/config/baram/initial_positions.yaml`.
+
+```text
+[0.0, 0.7770062579651399, 2.1978436317113994, -0.002471903355417154, 1.4730475459913506, -0.008791288084119586]
+```
+
+## Example Commands
+
+Check available controllers:
+
+```bash
+ros2 control list_controllers
+```
+
+Check joint states:
+
+```bash
+ros2 topic echo /joint_states
+```
+
+Send all joints to zero:
+
+```bash
+ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "
+joint_names:
+- joint1
+- joint2
+- joint3
+- joint4
+- joint5
+- joint6
+points:
+- positions: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  time_from_start:
+    sec: 7
+    nanosec: 0
+"
+```
+
+Send the robot to the configured home pose:
+
+```bash
+ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "
+joint_names:
+- joint1
+- joint2
+- joint3
+- joint4
+- joint5
+- joint6
+points:
+- positions: [0.0, 0.7770062579651399, 2.1978436317113994, -0.002471903355417154, 1.4730475459913506, -0.008791288084119586]
+  velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  time_from_start:
+    sec: 7
+    nanosec: 0
+"
+```
+
+Send a custom example motion:
+
+```bash
+ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "
+joint_names:
+- joint1
+- joint2
+- joint3
+- joint4
+- joint5
+- joint6
+points:
+- positions: [0.0, 0.5, 1.8, 0.0, 1.2, 0.0]
+  velocities: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  time_from_start:
+    sec: 7
+    nanosec: 0
+"
+```
