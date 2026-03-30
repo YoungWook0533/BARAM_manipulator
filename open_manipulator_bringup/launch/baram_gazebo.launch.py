@@ -9,6 +9,7 @@ from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription
 from launch.actions import RegisterEventHandler
 from launch.actions import SetEnvironmentVariable
+from launch.conditions import IfCondition
 from launch.event_handlers import OnProcessExit
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
@@ -36,6 +37,11 @@ def generate_launch_description():
     arguments = LaunchDescription([
         DeclareLaunchArgument(
             'world', default_value='empty_world', description='Gz sim World'
+        ),
+        DeclareLaunchArgument(
+            'start_rviz',
+            default_value='false',
+            description='Whether to execute rviz2',
         ),
     ])
 
@@ -120,6 +126,21 @@ def generate_launch_description():
         output='screen',
     )
 
+    rviz_config_file = os.path.join(
+        open_manipulator_description_path,
+        'rviz',
+        'open_manipulator.rviz',
+    )
+
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        arguments=['-d', rviz_config_file],
+        output='screen',
+        condition=IfCondition(LaunchConfiguration('start_rviz')),
+        parameters=[{'use_sim_time': True}],
+    )
+
     return LaunchDescription([
         RegisterEventHandler(
             event_handler=OnProcessExit(
@@ -131,6 +152,12 @@ def generate_launch_description():
             event_handler=OnProcessExit(
                 target_action=joint_state_broadcaster_spawner,
                 on_exit=[arm_controller_spawner],
+            )
+        ),
+        RegisterEventHandler(
+            event_handler=OnProcessExit(
+                target_action=arm_controller_spawner,
+                on_exit=[rviz_node],
             )
         ),
         bridge,

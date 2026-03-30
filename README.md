@@ -88,6 +88,46 @@ Gazebo:
 ros2 launch open_manipulator_bringup baram_gazebo.launch.py
 ```
 
+## MoveIt
+
+Use the MoveIt RViz instance when planning, so it is cleaner to disable RViz in the bringup launch.
+
+![BARAM MoveIt demo](resources/baram_moveit.gif)
+
+MoveIt with Gazebo:
+
+1. Start Gazebo:
+
+```bash
+ros2 launch open_manipulator_bringup baram_gazebo.launch.py
+```
+
+2. Start MoveIt with simulation time enabled:
+
+```bash
+ros2 launch open_manipulator_moveit_config baram_moveit.launch.py use_sim:=true
+```
+
+MoveIt with the real robot:
+
+1. Start the real robot driver:
+
+```bash
+ros2 launch open_manipulator_bringup baram.launch.py
+```
+
+2. Start MoveIt with simulation time disabled:
+
+```bash
+ros2 launch open_manipulator_moveit_config baram_moveit.launch.py use_sim:=false
+```
+
+Notes:
+
+- For the real robot, `use_sim:=false` is correct. This is also the default value.
+- For Gazebo, `use_sim:=true` is required so MoveIt uses the `/clock` topic.
+- Wait until MoveIt prints `You can start planning now!` before sending a trajectory.
+
 ## Home Pose
 
 Loaded from `open_manipulator_bringup/config/baram/initial_positions.yaml`.
