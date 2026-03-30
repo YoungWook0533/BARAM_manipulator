@@ -1,12 +1,11 @@
 # BARAM Manipulator
 
-This repository contains ROS 2 packages for the `baram` manipulator.
+ROS 2 packages for the `baram` manipulator.
 
-The `baram` robot is a 6-DOF manipulator using:
-- `joint1` to `joint6`
-- Dynamixel IDs `0` to `5`
-- `open_manipulator_bringup` for launch
-- `open_manipulator_description` for URDF/xacro and ros2_control
+- arm joints: `joint1` to `joint6`
+- arm Dynamixel IDs: `0` to `5`
+- arm launch: `open_manipulator_bringup`
+- robot description: `open_manipulator_description`
 
 ## Build
 
@@ -18,47 +17,47 @@ source install/setup.bash
 
 ## Launch
 
-Launch the real robot:
+Real robot:
 
 ```bash
 ros2 launch open_manipulator_bringup baram.launch.py
 ```
 
-Launch with RViz:
+With RViz:
 
 ```bash
 ros2 launch open_manipulator_bringup baram.launch.py start_rviz:=true
 ```
 
-Launch without the initial home motion:
+Without initial motion:
 
 ```bash
 ros2 launch open_manipulator_bringup baram.launch.py init_position:=false
 ```
 
-Launch with mock hardware:
+With mock hardware:
 
 ```bash
 ros2 launch open_manipulator_bringup baram.launch.py use_mock_hardware:=true
 ```
 
-Launch Gazebo:
+Gazebo:
 
 ```bash
 ros2 launch open_manipulator_bringup baram_gazebo.launch.py
 ```
 
-## Home Position
+## Home Pose
 
-The default home pose is loaded from `open_manipulator_bringup/config/baram/initial_positions.yaml`.
+Loaded from `open_manipulator_bringup/config/baram/initial_positions.yaml`.
 
 ```text
 [0.0, 0.7770062579651399, 2.1978436317113994, -0.002471903355417154, 1.4730475459913506, -0.008791288084119586]
 ```
 
-## Example Commands
+## Arm Commands
 
-Check available controllers:
+Check controllers:
 
 ```bash
 ros2 control list_controllers
@@ -70,7 +69,7 @@ Check joint states:
 ros2 topic echo /joint_states
 ```
 
-Send all joints to zero:
+Zero pose:
 
 ```bash
 ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "
@@ -90,7 +89,7 @@ points:
 "
 ```
 
-Send the robot to the configured home pose:
+Home pose:
 
 ```bash
 ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "
@@ -110,7 +109,7 @@ points:
 "
 ```
 
-Send a custom example motion:
+Custom example:
 
 ```bash
 ros2 topic pub --once /arm_controller/joint_trajectory trajectory_msgs/msg/JointTrajectory "
@@ -129,3 +128,53 @@ points:
     nanosec: 0
 "
 ```
+
+## Gripper
+
+Default gripper settings:
+
+- executable: `baram_gripper_controller`
+- port: `/dev/ttyUSB1`
+- baudrate: `1000000`
+- topic: `/gripper`
+
+Launch arm with gripper:
+
+```bash
+ros2 launch open_manipulator_bringup baram.launch.py gripper:=true
+```
+
+Run only gripper:
+
+```bash
+ros2 run open_manipulator_bringup baram_gripper_controller
+```
+
+Run gripper with custom port:
+
+```bash
+ros2 run open_manipulator_bringup baram_gripper_controller --ros-args -p device_name:=/dev/ttyUSB1 -p baudrate:=1000000
+```
+
+Open:
+
+```bash
+ros2 topic pub --once /gripper std_msgs/msg/UInt8 "{data: 0}"
+```
+
+Close:
+
+```bash
+ros2 topic pub --once /gripper std_msgs/msg/UInt8 "{data: 1}"
+```
+
+Emergency stop:
+
+```bash
+ros2 topic pub --once /estop std_msgs/msg/Bool "{data: true}"
+```
+
+Command values:
+
+- `0` = open
+- `1` = close

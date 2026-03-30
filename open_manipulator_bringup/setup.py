@@ -40,7 +40,7 @@ setup(
         (os.path.join('share', package_name), ['open-manipulator-cdc.rules']),
 
     ],
-    install_requires=['setuptools'],
+    install_requires=['setuptools', 'pyserial'],
     zip_safe=True,
     maintainer='Pyo',
     maintainer_email='pyo@robotis.com',
@@ -50,6 +50,7 @@ setup(
     entry_points={
         'console_scripts': [
             'joint_trajectory_executor = open_manipulator_bringup.joint_trajectory_executor:main',
+            'baram_gripper_controller = open_manipulator_bringup.baram_gripper_controller:main',
             'om_create_udev_rules = open_manipulator_bringup.om_create_udev_rules:main',
         ],
     },

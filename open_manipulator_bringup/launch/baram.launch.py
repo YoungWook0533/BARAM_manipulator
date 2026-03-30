@@ -45,6 +45,11 @@ def generate_launch_description():
             description='Port name for hardware connection.',
         ),
         DeclareLaunchArgument(
+            'gripper',
+            default_value='false',
+            description='Launch custom gripper controller node.',
+        ),
+        DeclareLaunchArgument(
             'init_position',
             default_value='true',
             description='Whether to launch the init_position node',
@@ -62,6 +67,7 @@ def generate_launch_description():
     use_mock_hardware = LaunchConfiguration('use_mock_hardware')
     mock_sensor_commands = LaunchConfiguration('mock_sensor_commands')
     port_name = LaunchConfiguration('port_name')
+    gripper = LaunchConfiguration('gripper')
     init_position = LaunchConfiguration('init_position')
     init_position_file = LaunchConfiguration('init_position_file')
 
@@ -137,6 +143,13 @@ def generate_launch_description():
         output='both',
     )
 
+    gripper_controller_node = Node(
+        package='open_manipulator_bringup',
+        executable='baram_gripper_controller',
+        output='both',
+        condition=IfCondition(gripper),
+    )
+
     joint_trajectory_executor = Node(
         package='open_manipulator_bringup',
         executable='joint_trajectory_executor',
@@ -172,6 +185,7 @@ def generate_launch_description():
             control_node,
             robot_controller_spawner,
             robot_state_publisher_node,
+            gripper_controller_node,
             delay_rviz_after_joint_state_broadcaster_spawner,
             delay_joint_trajectory_executor_after_controllers,
         ]
