@@ -10,21 +10,20 @@ ROS 2 packages for the `baram` manipulator.
 ## Start BARAM Controller
 
 ```bash
-cd ~/ros2_ws/src
+cd
 git clone https://github.com/YoungWook0533/BARAM_manipulator.git
 ```
 
 Start the Docker container from the repository:
 
 ```bash
-cd ~/ros2_ws/src/BARAM_manipulator/docker
+cd BARAM_manipulator/docker
 ./container.sh start
 ```
 
-Enter the Docker container:
+On same directory, enter container:
 
 ```bash
-cd ~/ros2_ws/src/BARAM_manipulator/docker
 ./container.sh enter
 ```
 
