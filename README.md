@@ -7,23 +7,65 @@ ROS 2 packages for the `baram` manipulator.
 - arm launch: `open_manipulator_bringup`
 - robot description: `open_manipulator_description`
 
-## Build
+## Start BARAM Controller
+
+```bash
+cd ~/ros2_ws/src
+git clone https://github.com/YoungWook0533/BARAM_manipulator.git
+```
+
+Start the Docker container from the repository:
+
+```bash
+cd ~/ros2_ws/src/BARAM_manipulator/docker
+./container.sh start
+```
+
+Enter the Docker container:
+
+```bash
+cd ~/ros2_ws/src/BARAM_manipulator/docker
+./container.sh enter
+```
+
+Inside Docker, install the gripper dependency:
+
+```bash
+sudo apt update
+sudo apt install python3-serial
+```
+
+Replace the default `dynamixel_hardware_interface` with the BARAM fork:
+
+```bash
+cd ~/ros2_ws/src
+rm -rf dynamixel_hardware_interface
+git clone https://github.com/YoungWook0533/dynamixel_hardware_interface.git
+```
+
+Build in `ros2_ws` with `cb`, then source the workspace:
 
 ```bash
 cd ~/ros2_ws
-colcon build --packages-select dynamixel_hardware_interface open_manipulator_description open_manipulator_bringup
+cb
 source install/setup.bash
 ```
 
 ## Launch
 
-Real robot:
+Launch the BARAM arm controller:
 
 ```bash
 ros2 launch open_manipulator_bringup baram.launch.py
 ```
 
-With RViz:
+Launch with gripper:
+
+```bash
+ros2 launch open_manipulator_bringup baram.launch.py gripper:=true
+```
+
+Launch with RViz:
 
 ```bash
 ros2 launch open_manipulator_bringup baram.launch.py start_rviz:=true
@@ -137,6 +179,13 @@ Default gripper settings:
 - port: `/dev/ttyUSB1`
 - baudrate: `1000000`
 - topic: `/gripper`
+
+Additional dependency:
+
+```bash
+sudo apt update
+sudo apt install python3-serial
+```
 
 Launch arm with gripper:
 
