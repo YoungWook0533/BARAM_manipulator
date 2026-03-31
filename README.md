@@ -92,7 +92,7 @@ ros2 launch open_manipulator_bringup baram_gazebo.launch.py
 
 Use the MoveIt RViz instance when planning, so it is cleaner to disable RViz in the bringup launch.
 
-![BARAM MoveIt demo](resources/baram_moveit.gif)
+![BARAM MoveIt demo](resources/baram_mani_moveit.gif)
 
 MoveIt with Gazebo:
 
