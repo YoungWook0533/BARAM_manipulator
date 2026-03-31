@@ -46,7 +46,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             'gripper',
-            default_value='false',
+            default_value='true',
             description='Launch custom gripper controller node.',
         ),
         DeclareLaunchArgument(
