@@ -21,7 +21,7 @@ def generate_launch_description():
         ),
         DeclareLaunchArgument(
             'prefix',
-            default_value='""',
+            default_value='',
             description='Prefix of the joint and link names',
         ),
         DeclareLaunchArgument(

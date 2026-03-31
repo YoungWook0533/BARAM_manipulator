@@ -114,7 +114,7 @@
       <parent link="${prefix}link3"/>
       <child link="${prefix}link4"/>
       <axis xyz="0 0 1"/>
-      <limit effort="10.0" velocity="1.5" lower="-1.57" upper="1.57"/>
+      <limit effort="10.0" velocity="1.5" lower="-1.5707963267948966" upper="1.5707963267948966"/>
       <dynamics damping="0.0"/>
     </joint>
 
@@ -154,7 +154,7 @@
       <parent link="${prefix}link5"/>
       <child link="${prefix}link6"/>
       <axis xyz="0 1 0"/>
-      <limit effort="10.0" velocity="1.5" lower="-1.57" upper="1.57"/>
+      <limit effort="10.0" velocity="1.5" lower="-1.5707963267948966" upper="1.5707963267948966"/>
       <dynamics damping="0.0"/>
     </joint>
 
@@ -180,7 +180,7 @@
       <parent link="${prefix}link6"/>
       <child link="${prefix}hand"/>
       <axis xyz="0 0 1"/>
-      <limit effort="10.0" velocity="1.5" lower="-1.57" upper="1.57"/>
+      <limit effort="10.0" velocity="1.5" lower="-1.5707963267948966" upper="1.5707963267948966"/>
       <dynamics damping="0.0"/>
     </joint>
 
